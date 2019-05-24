@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Homepage</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing: border-box;
+    }
+
+    .gallery{
+      display: flex;
+      justify-content: flex-start;
+      /* align-items default strech */
+      align-items: flex-start;  
+      /* flex-wrap: wrap; */
+      /* align-content zieht nur bei wrap */
+      /* align-content: center; */
+      border: 1px solid rgb(231, 218, 218);
+      height:500px;
+      width: 500px;
+      
+    }
+
+    .gallery .gallery-item{
+      /* float: left;
+      display: block; */
+      /* max-width: 150px; */
+      /* border: 3px solid yellow; */
+      /* height: 150px; */
+
+      /* 1 1 0%  */
+      /* flex: 1; */  
+      width: 100px;
+      /* flex-shrink: 1; */
+      /* flex-grow: 1; */
+      /* flex: 1 1 0%; */
+      border: 1px solid blue;
+    }
+
+    .gallery .gallery-item:nth-child(1){
+      /* align-self ok wenn align-content auf box aus */
+      /* align-self: flex-start; */
+      /* flex-grow: 3; */
+      /* flex-shrink: 3; */
+      flex-shrink: 2
+    }
+
+    .gallery .gallery-item:nth-child(2){
+      /* align-self ok wenn align-content auf box aus */
+      /* align-self: flex-start; */
+      /* flex-grow: 2; */
+      flex-shrink: 2
+    }
+
+    .overlay{
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: black;
+      opacity: 0.8;
+    
+    }
+
+    .container-overlay{
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      /* z-index: -1; */
+    }
+
+    .image-container{
+      background-color: yellow;
+      /* width: 600px;
+      height: 450px; */
+      margin: 200px auto; 
+      text-align: center;
+      position: relative;
+    }
+
+    .container-overlay img.image-container__image {
+      /* max-width: 600px; */
+      max-width: 100vw;
+    }
+    @media(min-width: 992px){
+      .container-overlay img.image-container__image {
+        max-width: 800px;
+      } 
+    }
+
+    .image-container__nav{
+      position: absolute;
+      top: calc(50% - 15px);
+      width: 100%;
+      height: 30px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      z-index: 3;
+    }
+
+    .image-container__nav__prev{
+      width: 30px;
+      height: 30px;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .image-container__nav__next{
+      width: 30px;
+      height: 30px;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="gallery">
+    <div class="gallery-item">item 1</div>
+    <div class="gallery-item">item 2</div>
+    <div class="gallery-item">item 3</div>
+    <div class="gallery-item">item 4</div>
+    <!-- <img src="images/Koala.jpg" alt="" class="gallery-item">
+    <img src="images/Lighthouse.jpg" alt="" class="gallery-item">
+    <img src="images/Penguins.jpg" alt="" class="gallery-item"> -->
+    <!-- <img src="images/Tulips.jpg" alt="" class="gallery-item">
+    <img src="images/Chrysanthemum.jpg" alt="" class="gallery-item"> -->
+    <!-- <img src="images/Desert.jpg" alt="" class="gallery-item">
+    <img src="images/Hydrangeas.jpg" alt="" class="gallery-item">
+    <img src="images/Jellyfish.jpg" alt="" class="gallery-item"> -->
+  </div>
+
+  <!-- <div class="container-overlay">
+      <div class="image-container">
+        <img src="images/Koala.jpg" alt="" class="image-container__image">
+        <div class="image-container__nav">
+          <div class="image-container__nav__prev"><span class="icon">&lt;</span></div>
+          <div class="image-container__nav__next"><span class="icon">&gt;</span></div>
+        </div>
+      </div>
+  </div> -->
+  <!-- <div class="overlay"></div> -->
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <script>
+
+    jQuery(document).ready(function($){
+
+      $(".gallery img").click(function(){
+        var that = this;
+        
+        var overlay = $.parseHTML('<div class="overlay"></div>');
+        $('body').append(overlay);
+
+        var imageskeleton = '<img class="image-container__image">';
+        var image = $.parseHTML(imageskeleton);
+        var image_prev = $.parseHTML(imageskeleton);
+        var image_next = $.parseHTML(imageskeleton);
+
+
+
+        imageBuilder(this);
+
+        function imageBuilder(that){
+          var src_prev = $(that).prev().attr('src');
+          var src_next = $(that).next().attr('src');
+          $(image_prev).attr('src', src_prev);
+          $(image_next).attr('src', src_next);
+
+          var src = $(that).attr('src');  //bezieht sich auf aktuelles element
+          $(image).attr('src', src);
+          $(image).attr('data-prev', src_prev);
+          $(image).attr('data-next', src_next);
+          addImageToContainer(image);
+        }
+
+
+
+
+
+        function addImageToContainer(image){
+          //$('body').append(overlay);
+          $(".container-overlay").remove();
+          var container = $.parseHTML('<div class="container-overlay"></div>');
+          var navcontainer = $.parseHTML('<div class="image-container__nav"></div>');
+          var prevnav = $.parseHTML('<div class="image-container__nav__prev"><span class="icon">&lt;</span></div>');
+          var nextnav = $.parseHTML('<div class="image-container__nav__next"><span class="icon">&gt;</span></div>');
+          var imagecontainer = $.parseHTML(`
+              <div class="image-container">
+                <!-- here comes the image prepend  -->
+                <!-- navcontainer goes here  -->
+              </div>
+        `);
+          $(imagecontainer).prepend(image);
+          if($(image).attr('data-prev') && $(image).attr('data-prev') != $(image).attr('src')){
+            $(navcontainer).prepend(prevnav);
+          }else{
+            $(navcontainer).prepend($.parseHTML('<div />'));
+          }
+          if($(image).attr('data-next') && $(image).attr('data-next') != $(image).attr('src')){
+            $(navcontainer).append(nextnav);
+          }else{
+            $(navcontainer).append($.parseHTML('<div />'));
+          }
+          $(imagecontainer).append(navcontainer);
+          $(container).append(imagecontainer);
+          $('body').append(container);
+        }
+    
+
+        $(".container-overlay").click(function(){
+          remove();
+        });
+
+        //kann von irgendwo aufgerufen werden
+        $(document).keydown(function (event) {
+          console.log(event);
+          if(event.key === "Escape") {
+            remove();
+            $(".overlay").remove();
+          }
+          if(event.key === "ArrowLeft") {
+            prev();
+          }
+          if (event.key === "ArrowRight") {
+            next();
+          }
+        });
+
+        var remove = function () {
+          $(".container-overlay").remove();
+          //$(".overlay").remove();
+        }
+
+        $(document).on("click", ".image-container__nav__prev",function() {
+          prev();
+        });
+
+        $(document).on("click", ".image-container__nav__next",function() {
+        //$("body .image-container__nav__next").click(function(){
+          next();
+        });
+
+        function prev(){
+          var previmage = $(image).attr('data-prev');
+          var next = $(".gallery").find(`img[src="${previmage}"]`).next().attr('src');
+          var prev = $(".gallery").find(`img[src="${previmage}"]`).prev().attr('src');
+          $(image).attr('data-prev', prev);
+          $(image).attr('data-next', next);
+          $(image).attr('src', previmage);
+          addImageToContainer(image);
+        }
+
+        function next(){
+          var nextimage = $(image).attr('data-next');
+          var next = $(".gallery").find(`img[src="${nextimage}"]`).next().attr('src');
+          var prev = $(".gallery").find(`img[src="${nextimage}"]`).prev().attr('src');
+          $(image).attr('data-prev', prev);
+          $(image).attr('data-next', next);
+          $(image).attr('src', nextimage);
+          addImageToContainer(image);
+        }
+
+
+      });
+
+
+
+    });
+  
+  </script>
+  
+</body>
+</html>

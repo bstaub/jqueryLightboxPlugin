@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Plugin Lightbox BS</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing: border-box;
+    }
+
+    .gallery{
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
+      border: 1px solid red;
+      
+    }
+
+    .gallery img{
+      /* float: left;
+      display: block; */
+      /* max-width: 150px; */
+      border: 3px solid yellow;
+      /* height: 400px; */
+      width: 200px;
+      flex: 1 1 0%;
+    }
+
+  </style>
+  <link rel="stylesheet" href="lightbox/lightbox.css">
+</head>
+<body>
+
+  <div class="gallery">
+    <img src="images/Koala.jpg" alt="">
+    <img src="images/Lighthouse.jpg" alt="">
+    <img src="images/Penguins.jpg" alt="">
+    <img src="images/Tulips.jpg" alt="">
+    <img src="images/Chrysanthemum.jpg" alt="">
+    <img src="images/Desert.jpg" alt="">
+    <img src="images/Hydrangeas.jpg" alt="">
+    <img src="images/Jellyfish.jpg" alt="">
+  </div>
+
+  <!-- <div class="container-overlay">
+      <div class="image-container">
+        <img src="images/Koala.jpg" alt="" class="image-container__image">
+        <div class="image-container__nav">
+          <div class="image-container__nav__prev"><span class="icon">&lt;</span></div>
+          <div class="image-container__nav__next"><span class="icon">&gt;</span></div>
+        </div>
+      </div>
+  </div> -->
+  <!-- <div class="overlay"></div> -->
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="lightbox/lightbox.js"></script>
+
+  <script>
+
+    jQuery(document).ready(function($){
+      
+      $(".gallery img").css('border', '5px solid black').lightbox();
+      
+    });
+  
+  </script>
+  
+</body>
+</html>
